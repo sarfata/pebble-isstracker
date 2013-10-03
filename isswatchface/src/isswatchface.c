@@ -11,12 +11,26 @@ PBL_APP_INFO(MY_UUID,
              APP_INFO_STANDARD_APP);
 
 Window window;
-
+TextLayer utc_text_layer;
+TextLayer nextpass_text_layer;
 
 void handle_init(AppContextRef ctx) {
 
   window_init(&window, "Window Name");
   window_stack_push(&window, true /* Animated */);
+
+  text_layer_init(&utc_text_layer, GRect(0, 25, 144, 50));
+  text_layer_set_text(&utc_text_layer, "18:42:42");
+  text_layer_set_font(&utc_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
+  text_layer_set_text_alignment(&utc_text_layer, GTextAlignmentCenter);
+
+  text_layer_init(&nextpass_text_layer, GRect(0, 80, 144, 50));
+  text_layer_set_text(&nextpass_text_layer, "00:10:22");
+  text_layer_set_font(&nextpass_text_layer, fonts_get_system_font(FONT_KEY_BITHAM_34_MEDIUM_NUMBERS));
+  text_layer_set_text_alignment(&nextpass_text_layer, GTextAlignmentCenter);
+
+  layer_add_child(window_get_root_layer(&window), (Layer*)&utc_text_layer);
+  layer_add_child(window_get_root_layer(&window), (Layer*)&nextpass_text_layer);
 }
 
 
