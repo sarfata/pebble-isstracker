@@ -5,9 +5,9 @@
 
 #define MY_UUID { 0xF2, 0xD3, 0xFD, 0x8E, 0xE8, 0xD4, 0x44, 0xC8, 0xAA, 0xAE, 0x56, 0x98, 0x0F, 0x6E, 0xB5, 0x66 }
 PBL_APP_INFO(MY_UUID,
-             "Template App", "Your Company",
+             "ISS Tracker", "Pebble Examples",
              1, 0, /* App version */
-             DEFAULT_MENU_ICON,
+             RESOURCE_ID_IMAGE_MENU_ICON,
              APP_INFO_STANDARD_APP);
 
 Window window;
@@ -26,13 +26,13 @@ void handle_init(AppContextRef ctx) {
   bmp_init_container(RESOURCE_ID_BACKGROUND_IMAGE, &background_image);
   layer_add_child(&window.layer, &background_image.layer.layer);
 
-  text_layer_init(&time_text_layer, GRect(16, 18, 106, 24));
+  text_layer_init(&time_text_layer, GRect(37, 1, 70, 24));
   text_layer_set_text(&time_text_layer, "18:42:42");
   text_layer_set_font(&time_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
   text_layer_set_text_alignment(&time_text_layer, GTextAlignmentCenter);
   text_layer_set_background_color(&time_text_layer, GColorClear);
 
-  text_layer_init(&nextpass_text_layer, GRect(0, 118, 144, 34));
+  text_layer_init(&nextpass_text_layer, GRect(0, 126, 144, 34));
   text_layer_set_text(&nextpass_text_layer, "00:10:22");
   text_layer_set_font(&nextpass_text_layer, fonts_get_system_font(FONT_KEY_BITHAM_34_MEDIUM_NUMBERS));
   text_layer_set_text_alignment(&nextpass_text_layer, GTextAlignmentCenter);

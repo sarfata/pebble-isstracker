@@ -2,6 +2,11 @@
 {"friendlyVersion": "VERSION",
  "versionDefName": "APP_RESOURCES",
  "media": [
+     {
+      "type":"png",
+      "defName":"IMAGE_MENU_ICON",
+      "file":"menu_icon_iss.png"
+     },
 	   {
 	    "type":"png",
 	    "defName":"BACKGROUND_IMAGE",
