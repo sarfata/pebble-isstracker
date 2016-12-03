@@ -13,12 +13,13 @@ PBL_APP_INFO(HTTP_UUID,
 #define ISS_COOKIE 155
 
 Window window;
-BmpContainer background_image;
 TextLayer time_text_layer;
-TextLayer nextpass_text_layer;
-time_t nextpass_time = 0;
 static char time_text[10];
+
+TextLayer nextpass_text_layer;
 static char nextpass_text[10];
+time_t nextpass_time = 0;
+BmpContainer background_image;
 
 int error = 0;
 
@@ -53,12 +54,7 @@ void handle_http_failure(int32_t request_id, int http_status, void* context) {
 
 // Called every second to update the text fields
 void handle_tick(AppContextRef app_ctx, PebbleTickEvent *t) {
-  if (error != 0) {
-    snprintf(time_text, sizeof(time_text), "Err: %i", error);
-  }
-  else {
-    string_format_time(time_text, sizeof(time_text), "%H:%M:%S", t->tick_time);
-  }
+  string_format_time(time_text, sizeof(time_text), "%H:%M:%S", t->tick_time);
   text_layer_set_text(&time_text_layer, time_text);
 
   int nextpass = nextpass_time - time(NULL);
@@ -88,23 +84,24 @@ void handle_init(AppContextRef ctx) {
   // Initialize ressources and load the background image
   resource_init_current_app(&APP_RESOURCES);
   bmp_init_container(RESOURCE_ID_BACKGROUND_IMAGE, &background_image);
-
-  // Create a text field to display the current time
-  text_layer_init(&time_text_layer, GRect(37, 0, 70, 24));
-  text_layer_set_font(&time_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
-  text_layer_set_text_alignment(&time_text_layer, GTextAlignmentCenter);
-  text_layer_set_background_color(&time_text_layer, GColorClear);
+  layer_add_child(&window.layer, &background_image.layer.layer);
 
   // Create a text field to display the time until the next pass
   text_layer_init(&nextpass_text_layer, GRect(0, 126, 144, 34));
   text_layer_set_font(&nextpass_text_layer, fonts_get_system_font(FONT_KEY_BITHAM_34_MEDIUM_NUMBERS));
   text_layer_set_text_alignment(&nextpass_text_layer, GTextAlignmentCenter);
   text_layer_set_background_color(&nextpass_text_layer, GColorClear);
+  layer_add_child(window_get_root_layer(&window), (Layer*)&time_text_layer);
+
+  // Create a text field to display the current time
+  text_layer_init(&time_text_layer, GRect(37, 0, 70, 24));
+  text_layer_set_font(&time_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
+  text_layer_set_text_alignment(&time_text_layer, GTextAlignmentCenter);
+  text_layer_set_background_color(&time_text_layer, GColorClear);
+  layer_add_child(window_get_root_layer(&window), (Layer*)&nextpass_text_layer);
+
 
   // Add background and both text fields to the window
-  layer_add_child(&window.layer, &background_image.layer.layer);
-  layer_add_child(window_get_root_layer(&window), (Layer*)&time_text_layer);
-  layer_add_child(window_get_root_layer(&window), (Layer*)&nextpass_text_layer);
 
   // Start an HTTP Request
   start_http_request();
